@@ -11,7 +11,7 @@ void forward()
 
 void manipulate()
 { set_servo_position (LSERVO, 1200);
-	set_set_position (RSERVO, 1100);
+	set_servo_position (RSERVO, 1100);
 }
 
 int main()
