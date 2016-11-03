@@ -38,9 +38,13 @@ int main(){
 	
 	while(1){
 <<<<<<< HEAD
+<<<<<<< HEAD
 		findBeacon();
 =======
 		if(gotBlock == False)
+=======
+		if(gotBlock == FALSE)
+>>>>>>> origin/master
 		{ if(hitWall() == TRUE){
 			{turnAround();
 			}
