@@ -20,8 +20,8 @@ int leftArmDown = 1200;
 int rightArmUp = 0;
 int leftArmUp = 1024;
 
-int defaultSpeed = 400;
-int defaultTime = 50;
+int defaultSpeed = 75;
+int defaultTime = 500;
 
 //Command Declarations
 void foward();
@@ -35,19 +35,7 @@ void findBeacon();
 
 int main(){
 	while(1){
-		if(hitWall() == TRUE){
-			turnAround();
-		}
-		else if(hitBlock() == TRUE){
-			manipulate();
-			gotBlock = TRUE;
-		}
-		else if(gotBlock == TRUE){
-			findBeacon();
-		}
-		else{
-			roam();
-		}
+		findBeacon();
 	}
 }
 
@@ -88,19 +76,24 @@ void manipulate(){
 ///////BEACON SEEKING////////
 
 void findBeacon(){
-	if(NBEACON == TRUE){
+	if(digital(NBEACON) == TRUE){
+		printf("NORTH");
 		forward();
 	}
-	else if(EBEACON == TRUE){
+	else if(digital(EBEACON) == TRUE){
+		printf("EAST");
 		turnRight();
 	}
-	else if(WBEACON == TRUE){
+	else if(digital(WBEACON) == TRUE){
+		printf("WEST");
 		turnLeft();
 	}
-	else if(SBEACON == TRUE){
+	else if(digital(SBEACON) == TRUE){
+		printf("SOUTH");
 		turnAround();
 	}
 	else{
 		forward();
+		printf("NONE");
 	}
 }		
