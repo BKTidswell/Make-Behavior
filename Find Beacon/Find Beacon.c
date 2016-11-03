@@ -4,6 +4,23 @@ int LSERVO = 2;
 int RSERVO = 0;
 int NBEACON= 10;
 
+void foward();
+void turnLeft();
+void turnRight();
+void turnAround();
+void manipulate();
+void findBeacon();
+
+/////////////////////////
+
+int main(){
+	while(1){
+		findBeacon();
+	}
+}
+
+/////////////////////////
+
 void forward(){
 	motor(LMOTOR, 50);
 	motor(RMOTOR, 50);
@@ -49,11 +66,4 @@ void findBeacon(){
 	else{
 		forward();
 	}
-}
-
-int main(){
-	while(1){
-		findBeacon();
-	}
-}
-		
+}		
