@@ -4,10 +4,10 @@ const int LMOTOR = 0;
 const int RMOTOR = 3;
 const int LSERVO = 2;
 const int RSERVO = 0;
-const int NBEACON= 10;
-const int EBEACON= 11;
-const int SBEACON= 12;
-const int WBEACON= 13;
+const int NBEACON= 13;
+const int EBEACON= 12;
+const int SBEACON= 11;
+const int WBEACON= 10;
 
 
 //True/False Delcaration
@@ -68,8 +68,9 @@ void turnAround(){
 ///////ARM CONTROL//////////
 
 void manipulate(){
+	senable_servos();
 	set_servo_position(LSERVO, leftArmDown);
-	set_set_position(RSERVO, rightArmDown);
+	set_enable_position(RSERVO, rightArmDown);
 }
 
 ///////BEACON SEEKING////////
