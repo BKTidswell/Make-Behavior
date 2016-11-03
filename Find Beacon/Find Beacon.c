@@ -79,8 +79,7 @@ void findBeacon(){
 	while(digital(NBEACON) == FALSE){
 		motor(LMOTOR, defaultSpeed / 4);
 		motor(RMOTOR, -defaultSpeed /4);
-		msleep(25);
-		if
+		msleep(defaultTime / 5);
 	}
 	forward();
 }		
