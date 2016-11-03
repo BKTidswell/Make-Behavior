@@ -4,10 +4,10 @@ const int LMOTOR = 0;
 const int RMOTOR = 3;
 const int LSERVO = 2;
 const int RSERVO = 0;
-const int NBEACON= 10;
-const int EBEACON= 11;
-const int SBEACON= 12;
-const int WBEACON= 13;
+const int NBEACON= 13;
+const int EBEACON= 12;
+const int SBEACON= 11;
+const int WBEACON= 10;
 
 
 //True/False Delcaration
@@ -20,7 +20,7 @@ int leftArmDown = 1200;
 int rightArmUp = 0;
 int leftArmUp = 1024;
 
-int defaultSpeed = 50;
+int defaultSpeed = 400;
 int defaultTime = 50;
 
 //Command Declarations
@@ -44,25 +44,25 @@ int main(){
 void forward(){
 	motor(LMOTOR, defaultSpeed);
 	motor(RMOTOR, defaultSpeed);
-	sleep(defaultTime / 2);
+	msleep(defaultTime / 2);
 }
 
 void turnLeft(){
 	motor(LMOTOR, -defaultSpeed);
 	motor(RMOTOR, defaultSpeed);
-	sleep(defaultTime);
+	msleep(defaultTime);
 }
 
 void turnRight(){
 	motor(LMOTOR, defaultSpeed);
 	motor(RMOTOR, -defaultSpeed);
-	sleep(defaultTime);
+	msleep(defaultTime);
 }
 
 void turnAround(){
 	motor(LMOTOR, -defaultSpeed);
 	motor(RMOTOR, defaultSpeed);
-	sleep(defaultTime * 2);
+	msleep(defaultTime * 2);
 }
 
 ///////ARM CONTROL//////////
