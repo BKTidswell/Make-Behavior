@@ -36,7 +36,7 @@ int main(){
 	}
 }
 
-/////////////////////////
+/////////BASIC MOVEMENT/////////
 
 void forward(){
 	motor(LMOTOR, defaultSpeed);
@@ -62,10 +62,14 @@ void turnAround(){
 	sleep(defaultTime * 2);
 }
 
+///////ARM CONTROL//////////
+
 void manipulate(){
 	set_servo_position(LSERVO, leftArmDown);
 	set_set_position(RSERVO, rightArmDown);
 }
+
+///////BEACON SEEKING////////
 
 void findBeacon(){
 	if(NBEACON < beaconVal){
