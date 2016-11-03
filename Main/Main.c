@@ -46,7 +46,8 @@ const int FALSE = 0;
 
 //main loop
 int main(){
-	int hasBlock = 0;
+	int hasBlock = FALSE;
+	
     while(1){
 		if(hasBlock == FALSE){
 			handsUp();
@@ -62,6 +63,7 @@ int main(){
 			}
 		}
 		else if(hasBlock == TRUE && isBeacon() == TRUE){
+			printf("findBeacon \n");
 			findBeacon();
 		}
 		else{
@@ -142,13 +144,13 @@ void forward(){
 void turnLeft(){
 	motor(LMOTOR, -defaultSpeed);
 	motor(RMOTOR, defaultSpeed);
-	msleep(defaultTime);
+	msleep(defaultTime / 2);
 }
 
 void turnRight(){
 	motor(LMOTOR, defaultSpeed);
 	motor(RMOTOR, -defaultSpeed);
-	msleep(defaultTime);
+	msleep(defaultTime / 2);
 }
 
 void turnAround(){
@@ -175,19 +177,19 @@ int isBeacon(){
 
 void findBeacon(){
 	if(digital(NBEACON) == TRUE){
-		printf("NORTH");
+		printf("NORTH \n");
 		forward();
 	}
 	else if(digital(EBEACON) == TRUE){
-		printf("EAST");
+		printf("EAST \n");
 		turnRight();
 	}
 	else if(digital(WBEACON) == TRUE){
-		printf("WEST");
+		printf("WEST \n");
 		turnLeft();
 	}
 	else if(digital(SBEACON) == TRUE){
-		printf("SOUTH");
+		printf("SOUTH \n");
 		turnAround();
 	}
 	else{
