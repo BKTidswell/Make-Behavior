@@ -77,9 +77,9 @@ void manipulate(){
 
 void findBeacon(){
 	while(digital(NBEACON) == FALSE){
-		motor(LMOTOR, defaultSpeed / 4);
-		motor(RMOTOR, -defaultSpeed /4);
-		msleep(defaultTime / 5);
+		motor(LMOTOR, defaultSpeed / 2);
+		motor(RMOTOR, -defaultSpeed / 2);
+		msleep(defaultTime / 2);
 	}
 	forward();
 }		

@@ -23,6 +23,8 @@ int leftArmUp = 1024;
 int defaultSpeed = 75;
 int defaultTime = 500;
 
+int threshIR = 250;
+
 //Command Declarations
 void foward();
 void turnLeft();
@@ -46,11 +48,11 @@ void roam(){
 	int rightIRValue = analog_et(RIGHT_IR);
 	int leftIRValue = analog_et(LEFT_IR);
 	
-	int rmSpeed = defaultSpeed * (leftIRValue / rightIRValue);
-	int lmSpeed = defaultSpeed * (rightIRValue / leftIRValue);
+	int rmSpeed = defaultSpeed + defaultSpeed * (rightIRValue / threshIR);
+	int lmSpeed = defaultSpeed + defaultSpeed *  (leftIRValue / threshIR);
 	
-	motor(LMOTOR, rmSpeed);
-	motor(RMOTOR, lmSpeed);
+	motor(LMOTOR, lmSpeed);
+	motor(RMOTOR, rmSpeed);
 }
 
 /////////BASIC MOVEMENT/////////

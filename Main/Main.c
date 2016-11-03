@@ -1,8 +1,8 @@
 //Define input channels for actuators and sensors
 const int LMOTOR = 0;
 const int RMOTOR = 3;
-const int LSERVO = 2;
-const int RSERVO = 0;
+const int LSERVO = 0;
+const int RSERVO = 2;
 const int NBEACON= 4;
 const int EBEACON= 5;
 const int SBEACON= 6;
@@ -17,10 +17,12 @@ int beaconVal = 100;
 int rightArmDown = 1100;
 int leftArmDown = 1200;
 int rightArmUp = 0;
-int leftArmUp = 1024;
+int leftArmUp = 2040;
 
 int defaultSpeed = 75;
 int defaultTime = 300;
+
+int threshIR = 250;
 
 //Command Declarations
 void forward();
@@ -29,10 +31,14 @@ void turnRight();
 void turnAround();
 void manipulate();
 void findBeacon();
-void armsDown();
+void handsDown();
+void handsUp();
 void backUp();
 int hitWall();
 int hitBlock();
+void roam();
+void findBeacon();
+int isBeacon();
 
 //Define boolean constants
 const int TRUE = 1;
@@ -40,20 +46,27 @@ const int FALSE = 0;
 
 //main loop
 int main(){
-    
+	int hasBlock = 0;
     while(1){
-		if(hitWall()== TRUE){
-			printf("hitWall \n");
-			backUp();
-			turnAround();
+		if(hasBlock == FALSE){
+			handsUp();
+			if(hitWall()== TRUE){
+				printf("hitWall \n");
+				backUp();
+				turnAround();
+			}
+			else if(hitBlock() == TRUE){
+				printf("hitBlock \n");
+				hasBlock = TRUE;
+				handsDown();	
+			}
 		}
-		else if(hitBlock() == TRUE){
-			printf("hitBlock \n");
-			armsDown();	
+		else if(hasBlock == TRUE && isBeacon() == TRUE){
+			findBeacon();
 		}
 		else{
 			printf("else \n");
-			forward();
+			roam();
 		}
 	}
 }
@@ -104,13 +117,17 @@ int hitBlock(){
     }
 }	
 
-//Roam fucntion includes avoiding objects	
+///////////ROAM//////////
 
-int Roam(){
-    
-    int left_ir;
-    int right_ir;
-    
+void roam(){
+	int rightIRValue = analog_et(RIGHT_IR);
+	int leftIRValue = analog_et(LEFT_IR);
+	
+	int rmSpeed = defaultSpeed + defaultSpeed * (rightIRValue / threshIR);
+	int lmSpeed = defaultSpeed + defaultSpeed *  (leftIRValue / threshIR);
+	
+	motor(LMOTOR, lmSpeed);
+	motor(RMOTOR, rmSpeed);
 }
 
 
@@ -145,10 +162,51 @@ void backUp() {
 	msleep(defaultTime/2);
 }
 
+///////BEACON SEEKING////////
+
+int isBeacon(){
+	if(digital(NBEACON) + digital(EBEACON) + digital(WBEACON) + digital(SBEACON) >= 1){
+		return(TRUE);
+	}
+	else{
+		return(FALSE);
+	}
+}
+
+void findBeacon(){
+	if(digital(NBEACON) == TRUE){
+		printf("NORTH");
+		forward();
+	}
+	else if(digital(EBEACON) == TRUE){
+		printf("EAST");
+		turnRight();
+	}
+	else if(digital(WBEACON) == TRUE){
+		printf("WEST");
+		turnLeft();
+	}
+	else if(digital(SBEACON) == TRUE){
+		printf("SOUTH");
+		turnAround();
+	}
+	else{
+		forward();
+		printf("NONE");
+	}
+}		
+
 ///////ARM CONTROL//////////
 
-void armsDown(){
+void handsDown(){
 	enable_servos();
 	set_servo_position(LSERVO, leftArmDown);
 	set_servo_position(RSERVO, rightArmDown);
 }
+
+void handsUp(){
+	enable_servos();
+	set_servo_position(LSERVO, leftArmUp);
+	set_servo_position(RSERVO, rightArmUp);
+}
+
