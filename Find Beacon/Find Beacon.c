@@ -4,14 +4,17 @@ const int LMOTOR = 0;
 const int RMOTOR = 3;
 const int LSERVO = 2;
 const int RSERVO = 0;
-const int NBEACON= 4;
-const int EBEACON= 5;
-const int SBEACON= 6;
-const int WBEACON= 7;
+const int NBEACON= 10;
+const int EBEACON= 11;
+const int SBEACON= 12;
+const int WBEACON= 13;
+
+
+//True/False Delcaration
+const int TRUE = 1;
+const int FALSE = 0;
 
 //Value Declarations
-int beaconVal = 100;
-
 int rightArmDown = 1100;
 int leftArmDown = 1200;
 int rightArmUp = 0;
@@ -72,16 +75,16 @@ void manipulate(){
 ///////BEACON SEEKING////////
 
 void findBeacon(){
-	if(NBEACON < beaconVal){
+	if(NBEACON == TRUE){
 		forward();
 	}
-	else if(EBEACON < beaconVal){
+	else if(EBEACON == TRUE){
 		turnRight();
 	}
-	else if(WBEACON < beaconVal){
+	else if(WBEACON == TRUE){
 		turnLeft();
 	}
-	else if(SBEACON < beaconVal){
+	else if(SBEACON == TRUE){
 		turnAround();
 	}
 	else{
