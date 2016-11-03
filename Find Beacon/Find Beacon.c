@@ -37,7 +37,7 @@ int main(){
 	
 	
 	while(1){
-		if(gotBlock == False)
+		if(gotBlock == FALSE)
 		{ if(hitWall() == TRUE){
 			{turnAround();
 			}
