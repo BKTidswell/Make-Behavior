@@ -26,21 +26,21 @@ int main(){
 }
 
 
-//Escape behavior 
-int EscapeFrontBump(){
+/* this function gives true or false telling whether robot has hit the wall*/
+int hitWall(){
     
 	int left_ir;
 	int right_ir;
-    int front_bump = digital(FRONT_BUMP);
+    int front_bump;
     
 	int escapeThreshold_ir = 400;
 	
 	left_ir = analog_et(LEFT_IR);
 	right_ir = analog_et(RIGHT_IR);
+	front_bump = digital(FRONT_BUMP);
 	
     if(front_bump == TRUE){
 		if(left_ir > escapeThreshold || right_ir > escapeThreshold){
-        Escape_Command = BACK_LEFT;
         return TRUE;
 		}
     }
@@ -49,30 +49,37 @@ int EscapeFrontBump(){
     }
 }
 
-//Avoid Objects
-int Avoid(){
+//return tru of false if we have hit a block
+int hitBlock(){
+	int left_ir;
+	int right_ir;
+    int front_bump;
     
-    int left_ir;
-    int right_ir;
-    
-    int avoidThreshold = 350;
-    
-    left_ir = analog_et(LEFT_IR);
-    right_ir = analog_et(RIGHT_IR);
-    
-    if(left_ir > avoidThreshold){
-        Avoid_Command = ARC_RIGHT;
+	int blockThreshold_ir = 400;
+	
+	left_ir = analog_et(LEFT_IR);
+	right_ir = analog_et(RIGHT_IR);
+	front_bump = digital(FRONT_BUMP);
+	
+    if(front_bump == TRUE){
+		if(left_ir < blockThreshold || right_ir < blockThreshold){
         return TRUE;
-    }
-    
-    else if(right_ir > avoidThreshold){
-        Avoid_Command = ARC_LEFT;
-        return TRUE;
+		}
     }
     else{
         return FALSE;
     }
+}	
+
+//Roam fucntion includes avoiding objects	
+
+int Roam(){
+    
+    int left_ir;
+    int right_ir;
+    
 }
+
 //
 
 //Move function

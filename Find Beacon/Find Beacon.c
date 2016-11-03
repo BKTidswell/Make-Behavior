@@ -34,8 +34,28 @@ void findBeacon();
 //////////MAIN///////////
 
 int main(){
+	
+	
 	while(1){
+<<<<<<< HEAD
 		findBeacon();
+=======
+		if(gotBlock == False)
+		{ if(hitWall() == TRUE){
+			{turnAround();
+			}
+		else if(hitBlock() == TRUE){
+			manipulate();
+			gotBlock = TRUE;
+		}
+		}
+		else if(gotBlock == TRUE){
+			findBeacon();
+		}
+		else{
+			roam();
+		}
+>>>>>>> origin/master
 	}
 }
 
