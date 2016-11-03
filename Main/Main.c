@@ -26,6 +26,55 @@ int main(){
 }
 
 
+//Escape behavior 
+int EscapeFrontBump(){
+    
+	int left_ir;
+	int right_ir;
+    int front_bump = digital(FRONT_BUMP);
+    
+	int escapeThreshold_ir = 400;
+	
+	left_ir = analog_et(LEFT_IR);
+	right_ir = analog_et(RIGHT_IR);
+	
+    if(front_bump == TRUE){
+		if(left_ir > escapeThreshold || right_ir > escapeThreshold){
+        Escape_Command = BACK_LEFT;
+        return TRUE;
+		}
+    }
+    else{
+        return FALSE;
+    }
+}
+
+//Avoid Objects
+int Avoid(){
+    
+    int left_ir;
+    int right_ir;
+    
+    int avoidThreshold = 350;
+    
+    left_ir = analog_et(LEFT_IR);
+    right_ir = analog_et(RIGHT_IR);
+    
+    if(left_ir > avoidThreshold){
+        Avoid_Command = ARC_RIGHT;
+        return TRUE;
+    }
+    
+    else if(right_ir > avoidThreshold){
+        Avoid_Command = ARC_LEFT;
+        return TRUE;
+    }
+    else{
+        return FALSE;
+    }
+}
+//
+
 //Move function
 void Move(int command){
     if(command == BACK_LEFT){
