@@ -34,32 +34,8 @@ void findBeacon();
 //////////MAIN///////////
 
 int main(){
-	
-	
 	while(1){
-<<<<<<< HEAD
-<<<<<<< HEAD
 		findBeacon();
-=======
-		if(gotBlock == False)
-=======
-		if(gotBlock == FALSE)
->>>>>>> origin/master
-		{ if(hitWall() == TRUE){
-			{turnAround();
-			}
-		else if(hitBlock() == TRUE){
-			manipulate();
-			gotBlock = TRUE;
-		}
-		}
-		else if(gotBlock == TRUE){
-			findBeacon();
-		}
-		else{
-			roam();
-		}
->>>>>>> origin/master
 	}
 }
 
@@ -100,24 +76,10 @@ void manipulate(){
 ///////BEACON SEEKING////////
 
 void findBeacon(){
-	if(digital(NBEACON) == TRUE){
-		printf("NORTH");
-		forward();
+	while(digital(NBEACON) == FALSE)){
+		motor(LMOTOR, defaultSpeed);
+		motor(RMOTOR, -defaultSpeed);
+		msleep(25);
 	}
-	else if(digital(EBEACON) == TRUE){
-		printf("EAST");
-		turnRight();
-	}
-	else if(digital(WBEACON) == TRUE){
-		printf("WEST");
-		turnLeft();
-	}
-	else if(digital(SBEACON) == TRUE){
-		printf("SOUTH");
-		turnAround();
-	}
-	else{
-		forward();
-		printf("NONE");
-	}
+	forward();
 }		
