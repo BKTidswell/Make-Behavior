@@ -61,6 +61,10 @@ int main(){
 				hasBlock = TRUE;
 				handsDown();	
 			}
+			else{
+				printf("else \n");
+				roam();
+			}
 		}
 		else if(hasBlock == TRUE && isBeacon() == TRUE){
 			printf("findBeacon \n");
@@ -158,10 +162,16 @@ void turnAround(){
 	motor(RMOTOR, defaultSpeed);
 	msleep(defaultTime * 2);
 }
+
 void backUp() {
 	motor(LMOTOR, -defaultSpeed);
 	motor(RMOTOR, -defaultSpeed);
 	msleep(defaultTime/2);
+}
+
+void stop(){
+	motor(LMOTOR, 0);
+	motor(RMOTOR, 0);
 }
 
 ///////BEACON SEEKING////////
@@ -177,24 +187,19 @@ int isBeacon(){
 
 void findBeacon(){
 	if(digital(NBEACON) == TRUE){
-		printf("NORTH \n");
 		forward();
 	}
 	else if(digital(EBEACON) == TRUE){
-		printf("EAST \n");
 		turnRight();
 	}
 	else if(digital(WBEACON) == TRUE){
-		printf("WEST \n");
 		turnLeft();
 	}
 	else if(digital(SBEACON) == TRUE){
-		printf("SOUTH \n");
 		turnAround();
 	}
 	else{
-		forward();
-		printf("NONE");
+		stop();
 	}
 }		
 
