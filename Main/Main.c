@@ -63,7 +63,7 @@ int main(){
 			}
 			else{
 				printf("else \n");
-				roam();
+				roam(1);
 			}
 		}
 		else if(hasBlock == TRUE && isBeacon() == TRUE){
@@ -72,7 +72,7 @@ int main(){
 		}
 		else{
 			printf("else \n");
-			roam();
+			roam(2);
 		}
 	}
 }
@@ -125,17 +125,16 @@ int hitBlock(){
 
 ///////////ROAM//////////
 
-void roam(){
+void roam(mod){
 	int rightIRValue = analog_et(RIGHT_IR);
 	int leftIRValue = analog_et(LEFT_IR);
 	
-	int rmSpeed = defaultSpeed + defaultSpeed * (rightIRValue / threshIR);
-	int lmSpeed = defaultSpeed + defaultSpeed *  (leftIRValue / threshIR);
+	int rmSpeed = defaultSpeed + defaultSpeed * mod * (rightIRValue / threshIR);
+	int lmSpeed = defaultSpeed + defaultSpeed * mod * (leftIRValue / threshIR);
 	
-	motor(LMOTOR, lmSpeed);
-	motor(RMOTOR, rmSpeed);
+	motor(LMOTOR, lmSpeed / mod);
+	motor(RMOTOR, rmSpeed / mod);
 }
-
 
 /////////BASIC MOVEMENT/////////
 
