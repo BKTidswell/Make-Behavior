@@ -186,7 +186,7 @@ int isBeacon(){
 
 void findBeacon(){
 	if(digital(NBEACON) == TRUE){
-		forward();
+		roam(2);
 	}
 	else if(digital(EBEACON) == TRUE){
 		turnRight();
