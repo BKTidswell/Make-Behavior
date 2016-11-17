@@ -7,6 +7,7 @@ const int FRONT_BUMP= 15;
 const int LEFT_IR= 2;
 const int RIGHT_IR= 1;
 
+
 //Camera Stuff
 const int CAMERA_BLUE = 0;
 
@@ -62,11 +63,15 @@ int main(){
 			else if(hitBlock() == TRUE){
 				printf("hitBlock \n");
 				hasBlock = TRUE;
+				collectBlock();
 			}
 			else{
 				printf("else \n");
 				roam(1);
 			}
+		}
+		else if(hasBlock == TRUE){
+			roam(2);
 		}
 	}
 }
@@ -193,17 +198,15 @@ void collectBlock(){
 			block_position_x = get_object_center(CAMERA_BLUE, 0).x;
 			
 			if(block_position_x < 60){
-				motor(MRIGHT, 50);
-				motor(MLEFT, -50);
-				msleep(100);
+				motor(RMOTOR, 50);
+				motor(LMOTOR, -50);
+				msleep(50);
 			}
 			else if(block_position_x > 100){
-				motor(MRIGHT, -50);
-				motor(MLEFT, 50);
-				msleep(100);
+				motor(RMOTOR, -50);
+				motor(LMOTOR, 50);
+				msleep(50);
 			}
-			motor(MRIGHT, 0);
-			motor(MLEFT, 0);
 		}
 		
 	handsDown();
