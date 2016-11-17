@@ -3,17 +3,22 @@ const int LMOTOR = 0;
 const int RMOTOR = 3;
 const int LSERVO = 0;
 const int RSERVO = 2;
-const int NBEACON= 4;
-const int EBEACON= 5;
-const int SBEACON= 6;
-const int WBEACON= 7;
 const int FRONT_BUMP= 15;
 const int LEFT_IR= 2;
 const int RIGHT_IR= 1;
 
-//Value Declarations
-int beaconVal = 100;
+//Camera Stuff
+const int CAMERA_BLUE = 0;
 
+int block_position_x;
+int block_position_y;
+int block_width;
+int block_height;
+int block_error_y;
+int block_error_x;
+int targets;
+
+//Value Declarations
 int rightArmDown = 1100;
 int leftArmDown = 1200;
 int rightArmUp = 0;
@@ -30,15 +35,12 @@ void turnLeft();
 void turnRight();
 void turnAround();
 void manipulate();
-void findBeacon();
 void handsDown();
 void handsUp();
 void backUp();
 int hitWall();
 int hitBlock();
 void roam();
-void findBeacon();
-int isBeacon();
 
 //Define boolean constants
 const int TRUE = 1;
@@ -46,6 +48,7 @@ const int FALSE = 0;
 
 //main loop
 int main(){
+	camera_open();
 	int hasBlock = FALSE;
 	
     while(1){
@@ -59,20 +62,11 @@ int main(){
 			else if(hitBlock() == TRUE){
 				printf("hitBlock \n");
 				hasBlock = TRUE;
-				handsDown();	
 			}
 			else{
 				printf("else \n");
 				roam(1);
 			}
-		}
-		else if(hasBlock == TRUE && isBeacon() == TRUE){
-			printf("findBeacon \n");
-			findBeacon();
-		}
-		else{
-			printf("else \n");
-			roam(2);
 		}
 	}
 }
@@ -173,35 +167,6 @@ void stop(){
 	motor(RMOTOR, 0);
 }
 
-///////BEACON SEEKING////////
-
-int isBeacon(){
-	if(digital(NBEACON) + digital(EBEACON) + digital(WBEACON) + digital(SBEACON) >= 1){
-		return(TRUE);
-	}
-	else{
-		return(FALSE);
-	}
-}
-
-void findBeacon(){
-	if(digital(NBEACON) == TRUE){
-		roam(2);
-	}
-	else if(digital(EBEACON) == TRUE){
-		turnRight();
-	}
-	else if(digital(WBEACON) == TRUE){
-		turnLeft();
-	}
-	else if(digital(SBEACON) == TRUE){
-		turnAround();
-	}
-	else{
-		stop();
-	}
-}		
-
 ///////ARM CONTROL//////////
 
 void handsDown(){
@@ -216,3 +181,30 @@ void handsUp(){
 	set_servo_position(RSERVO, rightArmUp);
 }
 
+//////CAMERA STUFF/////////
+
+void collectBlock(){
+	camera_update();
+	block_position_x = get_object_center(CAMERA_BLUE, 0).x;
+	block_position_y = get_object_center(CAMERA_BLUE, 0).y;
+	
+	while(block_position_x < 60 || block_position_x > 100){
+			camera_update();
+			block_position_x = get_object_center(CAMERA_BLUE, 0).x;
+			
+			if(block_position_x < 60){
+				motor(MRIGHT, 50);
+				motor(MLEFT, -50);
+				msleep(100);
+			}
+			else if(block_position_x > 100){
+				motor(MRIGHT, -50);
+				motor(MLEFT, 50);
+				msleep(100);
+			}
+			motor(MRIGHT, 0);
+			motor(MLEFT, 0);
+		}
+		
+	handsDown();
+}
