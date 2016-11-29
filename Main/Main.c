@@ -26,15 +26,15 @@ int block_error_x;
 int targets;
 
 //Value Declarations
-int rightArmDown = 1100;
-int leftArmDown = 1200;
-int rightArmUp = 0;
-int leftArmUp = 2040;
+int leftArmUp = 360;
+int leftArmDown = 770;
+int rightArmUp = 1700;
+int rightArmDown = 1150;
 
-int camUp = 500;
-int camDown = 900;
+int camUp = 100;
+int camDown = 800;
 
-int defaultSpeed = 60;
+int defaultSpeed = 75;
 int defaultTime = 300;
 
 int threshIR = 300;
@@ -66,6 +66,8 @@ const int FALSE = 0;
 int main(){
 	enable_servos();
 	camera_open();
+	set_servo_position(LSERVO, leftArmUp);
+	set_servo_position(RSERVO, rightArmUp);
 	set_servo_position(CAMSERVO, camUp);
 	int hasBlock = FALSE;
 	int nest = FALSE;
@@ -73,12 +75,11 @@ int main(){
 	
     while(1){
 		if(hasBlock == FALSE){
-			handsUp();
-			if(lookBlock()==TRUE && hitBlock() == FALSE){
-				trackBlock();
-				forward();
-			}
-			else if(hitWall() == TRUE){
+			//if(lookBlock()==TRUE && hitBlock() == FALSE){
+			//	trackBlock();
+			//	forward();
+			//}
+			if(hitWall() == TRUE){
 				printf("hitWall \n");
 				backUp();
 				turnAround();
@@ -94,13 +95,16 @@ int main(){
 			}
 		}
 		else if(hasBlock == TRUE){
-			//seekNest();
-			//printf("found nest!");
-			roam(1.5);
-			//if(inNest()){
-			//	nest = TRUE;
-			//	hasBlock = FALSE;
-			//}
+			seekNest();
+			printf("found nest!");
+			roam(1);
+			if(inNest()){
+				printf("in nest!");
+				nest = TRUE;
+				hasBlock = FALSE;
+				handsUp();
+				turnAround();
+			}
 		}
 		else if(nest == TRUE){
 		stop();
@@ -162,11 +166,11 @@ void roam(mod){
 	int rightIRValue = analog_et(RIGHT_IR);
 	int leftIRValue = analog_et(LEFT_IR);
 	
-	int rmSpeed = defaultSpeed + defaultSpeed * (1/mod) * (rightIRValue / threshIR) * 0.75;
-	int lmSpeed = defaultSpeed + defaultSpeed * (1/mod) * (leftIRValue / threshIR) * 0.75;
+	int rmSpeed = defaultSpeed + defaultSpeed * (rightIRValue / threshIR) * 0.75;
+	int lmSpeed = defaultSpeed + defaultSpeed * (leftIRValue / threshIR) * 0.75;
 	
-	motor(LMOTOR, (lmSpeed * mod) - 25);
-	motor(RMOTOR, (rmSpeed * mod) - 25);
+	motor(LMOTOR, (lmSpeed * mod));
+	motor(RMOTOR, (rmSpeed * mod));
 }
 
 /////////BASIC MOVEMENT/////////
@@ -216,6 +220,7 @@ void handsDown(){
 void handsUp(){
 	set_servo_position(LSERVO, leftArmUp);
 	set_servo_position(RSERVO, rightArmUp);
+	printf("hands up");
 }
 
 //////CAMERA STUFF/////////
@@ -234,7 +239,6 @@ int checkBlock(){
 	else{
 		return(FALSE);
 	}
-	set_servo_position(CAMSERVO, camUp);
 }
 
 
@@ -250,13 +254,13 @@ void collectBlock(){
 			block_position_x = get_object_center(CAMERA_BLUE, 0).x;
 			
 			if(block_position_x < 60){
-				motor(RMOTOR, defaultSpeed);
-				motor(LMOTOR, -defaultSpeed);
+				motor(RMOTOR, defaultSpeed/ 1.5);
+				motor(LMOTOR, -defaultSpeed/ 1.5);
 				msleep(50);
 			}
 			else if(block_position_x > defaultSpeed){
-				motor(RMOTOR, -defaultSpeed);
-				motor(LMOTOR, defaultSpeed);
+				motor(RMOTOR, -defaultSpeed/ 1.5);
+				motor(LMOTOR, defaultSpeed/ 1.5);
 				msleep(50);
 			}
 			//motor(RMOTOR, -defaultSpeed);
@@ -309,37 +313,39 @@ void trackBlock(){
 
 void seekNest(){
 	camera_update();
+	set_servo_position(CAMSERVO, camUp);
 	int nest_position_x = get_object_center(CAMERA_GREEN, 0).x;
 	int nest_position_y = get_object_center(CAMERA_GREEN, 0).y;
 	
 	while(nest_position_x < 60 || nest_position_x > 100){
-		printf("collecting \n");
+		printf("nest finding \n");
 		camera_update();
 		nest_position_x = get_object_center(CAMERA_GREEN, 0).x;
 		
 		if(nest_position_x < 60){
-			motor(RMOTOR, defaultSpeed);
-			motor(LMOTOR, -defaultSpeed);
+			motor(RMOTOR, defaultSpeed/1.2);
+			motor(LMOTOR, -defaultSpeed/1.2);
 			msleep(50);
 		}
 		else if(nest_position_x > defaultSpeed){
-			motor(RMOTOR, -defaultSpeed);
-			motor(LMOTOR, defaultSpeed);
+			motor(RMOTOR, -defaultSpeed/1.2);
+			motor(LMOTOR, defaultSpeed/1.2);
 			msleep(50);
 		}
 	}
 }
 
 int inNest(){
-	int rline = analog_et(RIGHT_LINE);
-	int lline = analog_et(LEFT_LINE);
+	camera_update();
+	block_width = get_object_bbox(CAMERA_GREEN, 0).width;
+	block_height = get_object_bbox(CAMERA_GREEN, 0).height;
+	block_area = block_width * block_height;
 	
-	if(rline == TRUE && lline==TRUE){
-		msleep(500);
-		if(rline == TRUE && lline==TRUE){
-		return TRUE;
-		}
+	if(block_area > 5000){
+		return(TRUE);
 	}
-	else{return FALSE;}
+	else{
+		return(FALSE);
+	}
 }
 
